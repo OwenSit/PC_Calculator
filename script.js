@@ -36,6 +36,7 @@ const backpackList = () => {
   const Column = backpackArticle.querySelector(".Column");
   const MatrixDiv = backpackArticle.querySelector(".Matrix-Box");
 
+  // handle "create matrix" button
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
     let RowNum = Row.value;
@@ -46,12 +47,14 @@ const backpackList = () => {
   return backpackArticle;
 };
 
+// create matrix
 const CreateMat = (RowNum, ColumnNum) => {
   let divMatrix = document.createElement("div");
   divMatrix.classList.add("Matrix");
   let MatContent = `
   <div class="row">
   <div class="col-xs-9">
+  <p>Pairwise Comparison Matrix</p> 
   `;
   for (let i = 0; i < ColumnNum; i++) {
     MatContent += `<div class="col-12">`;
@@ -66,6 +69,8 @@ const CreateMat = (RowNum, ColumnNum) => {
     }
     MatContent += `<br/><br/></div>`;
   }
+
+  // add in new buttons for calculating geometric mean and kii triad
   MatContent += `
   <button class="btn btn-default mt-process">Process geometric mean</button>
   <button class="btn btn-default Kii-process">Process Kii</button> <strong><span class="Kii_result"></span></strong>
@@ -73,24 +78,47 @@ const CreateMat = (RowNum, ColumnNum) => {
   <div class="col-xs-3" id="geometric"></div>`;
   divMatrix.innerHTML = MatContent;
 
+  const button = divMatrix.querySelector(".mt-process");
+  const geometric = divMatrix.querySelector("#geometric");
+
+  let MatContentMul = ``;
+  MatContentMul += `<div class="col-12">
+  <p>Geometric Mean</p>`;
+  for (let i = 0; i < ColumnNum; i++) {
+    MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat" id="gm${i}"  disabled>
+    <br/><br/></div>`;
+  }
+  geometric.innerHTML = MatContentMul;
+
+  // calculating the 1/(new value) when changes detected
   const ChangeInput = divMatrix.querySelectorAll(".Mat");
   ChangeInput.forEach((item) => {
     item.addEventListener("change", (event) => {
+      let MatContentMul = ``;
+      geometric.replaceChildren();
       let id = event.target.id.replace("mt", "");
+      console.log(id[0]);
+      let rowNum = id[0];
       id = id.split("").reverse().join("");
       let otherTxt = divMatrix.querySelector(`#mt${id}`);
       otherTxt.value = 1 / event.target.value;
-
+      MatContentMul += `<div class="col-12">
+    <p>Geometric Mean</p>`;
+      for (let i = 0; i < ColumnNum; i++) {
+        MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat" id="gm${i}"  disabled>
+      <br/><br/></div>`;
+      }
+      geometric.innerHTML = MatContentMul;
       //handle click
     });
   });
 
-  const button = divMatrix.querySelector(".mt-process");
-  const geometric = divMatrix.querySelector("#geometric");
-
+  // when "geometrix mean" button is clicked
   button.addEventListener("click", () => {
     let MatContentMul = ``;
     geometric.replaceChildren();
+    MatContentMul += `<div class="col-12">
+    <p>Geometric Mean</p>`;
     for (let i = 0; i < ColumnNum; i++) {
       let mul = 1;
       for (let j = 0; j < RowNum; j++) {
@@ -123,7 +151,7 @@ const CreateMat = (RowNum, ColumnNum) => {
             let B = Math.abs(1 - (second * third) / first);
             dict.push({
               key: `${i},${j},${k}`,
-              value: Math.min(A, B)
+              value: Math.min(A, B),
             });
           }
         }

@@ -8,26 +8,27 @@ const backpackList = () => {
   <div class="row">
   <div class="col-sm-2">
   <div class="form-group">
-  <label for="Row">Row:</label>
+  <strong>Matrix Size:</strong>
+  <label for="Row">Row</label>
   <input type="number" name="Row" class="form-control Row" >
 </div>
 <div class="form-group">
-  <label for="Column">Column:</label>
+  <label for="Column">Column</label>
   <input type="number" name="Column" class="form-control Column">
 </div>
 
 <button class="btn btn-default lid-toggle">Create Matrix</button>
   </div>
   <div class="col-sm-10 Matrix-Box">
-  
+
     <h3>Matrix Part</h3>
     <p>After you enter the Column and Row number Please Click On Create Matrix Button</p>
-    
+
   </div>
-  
+
 </div>
 
-  
+
    `;
 
   const button = backpackArticle.querySelector(".lid-toggle");
@@ -56,11 +57,11 @@ const CreateMat = (RowNum, ColumnNum) => {
     MatContent += `<div class="col-12">`;
     for (let j = 0; j < RowNum; j++) {
       if (i < j) {
-        MatContent += `<input type="number" name="mt${i}${j}" class="Mat" id="mt${i}${j}" >`;
+        MatContent += `<input type="number" name="mt${i}${j}" class="Mat" id="mt${i}${j}" value="1">`;
       } else if (i == j) {
         MatContent += `<input type="number" value="1" name="mt${i}${j}" class="Mat" id="mt${i}${j}"  disabled>`;
       } else {
-        MatContent += `<input type="number" name="mt${i}${j}" class="Mat" id="mt${i}${j}" disabled>`;
+        MatContent += `<input type="number" name="mt${i}${j}" class="Mat" id="mt${i}${j}" value="1" disabled>`;
       }
     }
     MatContent += `<br/><br/></div>`;
@@ -120,7 +121,10 @@ const CreateMat = (RowNum, ColumnNum) => {
             let third = divMatrix.querySelector(`#mt${j}${k}`).value;
             let A = Math.abs(1 - first / (second * third));
             let B = Math.abs(1 - (second * third) / first);
-            dict.push({ key: `${i},${j},${k}`, value: Math.min(A, B) });
+            dict.push({
+              key: `${i},${j},${k}`,
+              value: Math.min(A, B)
+            });
           }
         }
       }

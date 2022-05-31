@@ -9,12 +9,8 @@ const backpackList = () => {
   <div class="col-sm-2">
   <div class="form-group">
   <strong>Matrix Size:</strong>
-  <label for="Row">Row</label>
-  <input type="number" name="Row" class="form-control Row" >
-</div>
-<div class="form-group">
-  <label for="Column">Column</label>
-  <input type="number" name="Column" class="form-control Column">
+  <label for="Size"></label>
+  <input type="number" name="Size" class="form-control Size" >
 </div>
 
 <button class="btn btn-default lid-toggle">Create Matrix</button>
@@ -32,15 +28,15 @@ const backpackList = () => {
    `;
 
   const button = backpackArticle.querySelector(".lid-toggle");
-  const Row = backpackArticle.querySelector(".Row");
-  const Column = backpackArticle.querySelector(".Column");
+  const Row = backpackArticle.querySelector(".Size");
+  const Column = Row;
   const MatrixDiv = backpackArticle.querySelector(".Matrix-Box");
 
   // handle "create matrix" button
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
     let RowNum = Row.value;
-    let ColumnNum = Column.value;
+    let ColumnNum = RowNum;
     MatrixDiv.append(CreateMat(RowNum, ColumnNum));
   });
 

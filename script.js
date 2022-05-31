@@ -49,7 +49,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   divMatrix.classList.add("Matrix");
   let MatContent = `
   <div class="row">
-  <div class="col-xs-9">
+  <div class="col-xs-7">
   <p>Pairwise Comparison Matrix</p> 
   `;
   for (let i = 0; i < ColumnNum; i++) {
@@ -68,44 +68,95 @@ const CreateMat = (RowNum, ColumnNum) => {
 
   // add in new buttons for calculating geometric mean and kii triad
   MatContent += `
-  <button class="btn btn-default mt-process">Process geometric mean</button>
+  <button class="btn btn-default mt-process">Process Geometric Mean</button>
+  <button class="btn btn-default nor-mt-process">Process Normalized Geometric Mean</button>
   <button class="btn btn-default Kii-process">Process Kii</button> <strong><span class="Kii_result"></span></strong>
   </div>
-  <div class="col-xs-3" id="geometric"></div>`;
+  <div class="col-xs-2" id="geometric"></div>
+  <div class="col-xs-3" id="nor-geometric"></div>`;
   divMatrix.innerHTML = MatContent;
 
   const button = divMatrix.querySelector(".mt-process");
+  const button_nor = divMatrix.querySelector(".nor-mt-process");
   const geometric = divMatrix.querySelector("#geometric");
+  const nor_geometric = divMatrix.querySelector("#nor-geometric");
 
+  // initialize geometrix mean column
   let MatContentMul = ``;
   MatContentMul += `<div class="col-12">
   <p>Geometric Mean</p>`;
   for (let i = 0; i < ColumnNum; i++) {
-    MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat" id="gm${i}"  disabled>
+    MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
     <br/><br/></div>`;
   }
   geometric.innerHTML = MatContentMul;
+
+  // initialize normalized geometrix mean column
+  let nor_MatContentMul = ``;
+  nor_MatContentMul += `<div class="col-12">
+  <p>Normalized Geometric Mean</p>`;
+  let geo_means = [];
+  let sum = 0;
+
+  // acquire data from the geometric mean column and store them in geo_means
+  for (let i = 0; i < ColumnNum; i++) {
+    geo_means[i] = divMatrix.querySelector(`#gm${i}`).value;
+    sum += parseInt(geo_means[i]);
+  }
+  console.log(sum);
+  //display data on the webpage
+  for (let i = 0; i < ColumnNum; i++) {
+    let nor = geo_means[i] / sum;
+    nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="nor_geo_col" id="nor_gm${i}"  disabled>
+    <br/><br/></div>`;
+  }
+  nor_geometric.innerHTML = nor_MatContentMul;
 
   // calculating the 1/(new value) when changes detected
   const ChangeInput = divMatrix.querySelectorAll(".Mat");
   ChangeInput.forEach((item) => {
     item.addEventListener("change", (event) => {
-      let MatContentMul = ``;
-      geometric.replaceChildren();
       let id = event.target.id.replace("mt", "");
       console.log(id[0]);
       let rowNum = id[0];
       id = id.split("").reverse().join("");
       let otherTxt = divMatrix.querySelector(`#mt${id}`);
       otherTxt.value = 1 / event.target.value;
+      let MatContentMul = ``;
+      geometric.replaceChildren();
       MatContentMul += `<div class="col-12">
     <p>Geometric Mean</p>`;
+      let geo_means = [];
       for (let i = 0; i < ColumnNum; i++) {
-        MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat" id="gm${i}"  disabled>
+        let mul = 1;
+        for (let j = 0; j < RowNum; j++) {
+          let otherTxt = divMatrix.querySelector(`#mt${i}${j}`);
+          mul = mul * otherTxt.value;
+        }
+        geo_means[i] = Math.pow(mul, 1 / RowNum);
+        MatContentMul += `<div class="col-12">
+      <input type="number" value="${Math.pow(
+        mul,
+        1 / RowNum
+      )}" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
       <br/><br/></div>`;
       }
+      console.log(geo_means);
+      let new_sum = 0;
+      for (let i = 0; i < ColumnNum; i++) {
+        new_sum += geo_means[i];
+      }
+      let nor_MatContentMul = ``;
+      nor_geometric.replaceChildren();
+      nor_MatContentMul += `<div class="col-12">
+  <p>Normalized Geometric Mean</p>`;
+      for (let i = 0; i < ColumnNum; i++) {
+        let nor = geo_means[i] / new_sum;
+        nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="nor_geo_col" id="nor_gm${i}"  disabled>
+    <br/><br/></div>`;
+      }
+      nor_geometric.innerHTML = nor_MatContentMul;
       geometric.innerHTML = MatContentMul;
-      //handle click
     });
   });
 

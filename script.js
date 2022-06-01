@@ -49,7 +49,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   divMatrix.classList.add("Matrix");
   let MatContent = `
   <div class="row">
-  <div class="col-xs-7">
+  <div class="col-xs-6">
   <p>Pairwise Comparison Matrix</p> 
   `;
   for (let i = 0; i < ColumnNum; i++) {
@@ -63,21 +63,23 @@ const CreateMat = (RowNum, ColumnNum) => {
         MatContent += `<input type="number" name="mt${i}${j}" class="Mat" id="mt${i}${j}" value="1" disabled>`;
       }
     }
-    MatContent += `<br/><br/></div>`;
+    MatContent += `<br/></div>`;
   }
 
   // add in new buttons for calculating geometric mean and kii triad
+  // <button class="btn btn-default nor-mt-process">Process Normalized Geometric Mean</button>
+
+  // <button class="btn btn-default mt-process">Process Geometric Mean</button>
   MatContent += `
-  <button class="btn btn-default mt-process">Process Geometric Mean</button>
-  <button class="btn btn-default nor-mt-process">Process Normalized Geometric Mean</button>
+
   <button class="btn btn-default Kii-process">Process Kii</button> <strong><span class="Kii_result"></span></strong>
   </div>
-  <div class="col-xs-2" id="geometric"></div>
+  <div class="col-xs-3" id="geometric"></div>
   <div class="col-xs-3" id="nor-geometric"></div>`;
   divMatrix.innerHTML = MatContent;
 
-  const button = divMatrix.querySelector(".mt-process");
-  const button_nor = divMatrix.querySelector(".nor-mt-process");
+  // const button = divMatrix.querySelector(".mt-process");
+  // const button_nor = divMatrix.querySelector(".nor-mt-process");
   const geometric = divMatrix.querySelector("#geometric");
   const nor_geometric = divMatrix.querySelector("#nor-geometric");
 
@@ -87,7 +89,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   <p>Geometric Mean</p>`;
   for (let i = 0; i < ColumnNum; i++) {
     MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
-    <br/><br/></div>`;
+    <br/></div>`;
   }
   geometric.innerHTML = MatContentMul;
 
@@ -103,12 +105,12 @@ const CreateMat = (RowNum, ColumnNum) => {
     geo_means[i] = divMatrix.querySelector(`#gm${i}`).value;
     sum += parseInt(geo_means[i]);
   }
-  console.log(sum);
+  // console.log(sum);
   //display data on the webpage
   for (let i = 0; i < ColumnNum; i++) {
-    let nor = geo_means[i] / sum;
-    nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="nor_geo_col" id="nor_gm${i}"  disabled>
-    <br/><br/></div>`;
+    let nor = (geo_means[i] / sum).toFixed(2);
+    nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="Mat" id="nor_gm${i}"  disabled>
+    <br/></div>`;
   }
   nor_geometric.innerHTML = nor_MatContentMul;
 
@@ -121,7 +123,9 @@ const CreateMat = (RowNum, ColumnNum) => {
       let rowNum = id[0];
       id = id.split("").reverse().join("");
       let otherTxt = divMatrix.querySelector(`#mt${id}`);
-      otherTxt.value = 1 / event.target.value;
+      otherTxt.value = (
+        Math.round((1 / event.target.value) * 100) / 100
+      ).toFixed(2);
       let MatContentMul = ``;
       geometric.replaceChildren();
       MatContentMul += `<div class="col-12">
@@ -133,27 +137,25 @@ const CreateMat = (RowNum, ColumnNum) => {
           let otherTxt = divMatrix.querySelector(`#mt${i}${j}`);
           mul = mul * otherTxt.value;
         }
-        geo_means[i] = Math.pow(mul, 1 / RowNum);
+        geo_means[i] = (
+          Math.round(Math.pow(mul, 1 / RowNum) * 100) / 100
+        ).toFixed(2);
         MatContentMul += `<div class="col-12">
-      <input type="number" value="${Math.pow(
-        mul,
-        1 / RowNum
-      )}" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
-      <br/><br/></div>`;
+      <input type="number" value="${geo_means[i]}" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
+      <br/></div>`;
       }
-      console.log(geo_means);
       let new_sum = 0;
       for (let i = 0; i < ColumnNum; i++) {
-        new_sum += geo_means[i];
+        new_sum += parseFloat(geo_means[i]);
       }
       let nor_MatContentMul = ``;
       nor_geometric.replaceChildren();
       nor_MatContentMul += `<div class="col-12">
   <p>Normalized Geometric Mean</p>`;
       for (let i = 0; i < ColumnNum; i++) {
-        let nor = geo_means[i] / new_sum;
-        nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="nor_geo_col" id="nor_gm${i}"  disabled>
-    <br/><br/></div>`;
+        let nor = (Math.round((geo_means[i] / new_sum) * 100) / 100).toFixed(2);
+        nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="Mat" id="nor_gm${i}"  disabled>
+    <br/></div>`;
       }
       nor_geometric.innerHTML = nor_MatContentMul;
       geometric.innerHTML = MatContentMul;
@@ -161,27 +163,27 @@ const CreateMat = (RowNum, ColumnNum) => {
   });
 
   // when "geometrix mean" button is clicked
-  button.addEventListener("click", () => {
-    let MatContentMul = ``;
-    geometric.replaceChildren();
-    MatContentMul += `<div class="col-12">
-    <p>Geometric Mean</p>`;
-    for (let i = 0; i < ColumnNum; i++) {
-      let mul = 1;
-      for (let j = 0; j < RowNum; j++) {
-        let otherTxt = divMatrix.querySelector(`#mt${i}${j}`);
-        mul = mul * otherTxt.value;
-      }
-      MatContentMul += `<div class="col-12">
-      <input type="number" value="${Math.pow(
-        mul,
-        1 / RowNum
-      )}" name="gm${i}" class="Mat" id="gm${i}"  disabled>
-      <br/><br/></div>`;
-    }
+  // button.addEventListener("click", () => {
+  //   let MatContentMul = ``;
+  //   geometric.replaceChildren();
+  //   MatContentMul += `<div class="col-12">
+  //   <p>Geometric Mean</p>`;
+  //   for (let i = 0; i < ColumnNum; i++) {
+  //     let mul = 1;
+  //     for (let j = 0; j < RowNum; j++) {
+  //       let otherTxt = divMatrix.querySelector(`#mt${i}${j}`);
+  //       mul = mul * otherTxt.value;
+  //     }
+  //     MatContentMul += `<div class="col-12">
+  //     <input type="number" value="${Math.pow(
+  //       mul,
+  //       1 / RowNum
+  //     )}" name="gm${i}" class="Mat" id="gm${i}"  disabled>
+  //     <br/><br/></div>`;
+  //   }
 
-    geometric.innerHTML = MatContentMul;
-  });
+  //   geometric.innerHTML = MatContentMul;
+  // });
 
   const buttonKii = divMatrix.querySelector(".Kii-process");
 

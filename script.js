@@ -218,7 +218,7 @@ const CreateMat = (RowNum, ColumnNum) => {
     let secondTxt = divMatrix.querySelector(`#mt${indexes[1]}${indexes[2]}`);
     let thirdTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[2]}`);
     let resultShow = divMatrix.querySelector(".Kii_result");
-    resultShow.innerHTML = `maximum of ${finditem.value} where ${finditem.key} is a triad`;
+    resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${finditem.key} is a triad`;
     firstTxt.style.backgroundColor = "#ffcbcb";
     secondTxt.style.backgroundColor = "#ffcbcb";
     thirdTxt.style.backgroundColor = "#ffcbcb";

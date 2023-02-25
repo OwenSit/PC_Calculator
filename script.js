@@ -217,26 +217,28 @@ const CreateMat = (RowNum, ColumnNum) => {
     let firstTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[1]}`);
     let secondTxt = divMatrix.querySelector(`#mt${indexes[1]}${indexes[2]}`);
     let thirdTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[2]}`);
-    let allTxt = divMatrix.querySelector(`#mt01`)
+    let allTxt = divMatrix.querySelector(`#mt01`);
     let resultShow = divMatrix.querySelector(".Kii_result");
-    resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${finditem.key} is a triad`;
+    resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
+      Number(indexes[0]) + 1
+    }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad`;
     //allTxt.style.backgroundColor = "#ffff00";
-    for(let i=0; i<RowNum; i++) {
-      for(let j=0; j<RowNum; j++){
-        divMatrix.querySelector(`#mt${i}${j}`).style.backgroundColor = "#ffffff";
+    for (let i = 0; i < RowNum; i++) {
+      for (let j = 0; j < RowNum; j++) {
+        divMatrix.querySelector(`#mt${i}${j}`).style.backgroundColor =
+          "#ffffff";
       }
     }
-    if(finditem.value.toFixed(2) <= 0.33) {
+    if (finditem.value.toFixed(2) <= 0.33) {
       firstTxt.style.backgroundColor = "#90ee90";
       secondTxt.style.backgroundColor = "#90ee90";
       thirdTxt.style.backgroundColor = "#90ee90";
-    }
-    else {
+    } else {
       firstTxt.style.backgroundColor = "#ffcbcb";
       secondTxt.style.backgroundColor = "#ffcbcb";
       thirdTxt.style.backgroundColor = "#ffcbcb";
-      }
-    });
+    }
+  });
 
   return divMatrix;
 };

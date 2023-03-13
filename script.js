@@ -12,7 +12,7 @@ const backpackList = () => {
   <label for="Size"></label>
   <input type="number" name="Size" class="form-control Size" >
 </div>
-
+  
 <button class="btn btn-default lid-toggle">Create Matrix</button>
   </div>
   <div class="col-sm-10 Matrix-Box">
@@ -29,20 +29,21 @@ const backpackList = () => {
 
   const button = backpackArticle.querySelector(".lid-toggle");
   const Row = backpackArticle.querySelector(".Size");
-  const Column = Row;
+  // const Column = Row;
   const MatrixDiv = backpackArticle.querySelector(".Matrix-Box");
 
   // handle "create matrix" button
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
-    let RowNumText = Row;
     // add data validation:
-    if (RowNumText.value < 3 || !Number.isInteger(RowNumText)) {
+    if (Row < 3 || !Number.isInteger(Number(Row.value))) {
+
+      console.log(Row.value);
       alert('⚠ - Please enter an integer value that is greater than or equal to 3');
       window.location.reload();
     }
     else {
-      let RowNum = RowNumText.value;
+      let RowNum = Row.value;
       let ColumnNum = RowNum;
       MatrixDiv.append(CreateMat(RowNum, ColumnNum));
     }

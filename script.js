@@ -12,13 +12,14 @@ const backpackList = () => {
   <label for="Size"></label>
   <input type="number" name="Size" class="form-control Size" >
 </div>
-  
+
 <button class="btn btn-default lid-toggle">Create Matrix</button>
   </div>
-  <div class="col-sm-10 Matrix-Box">
+  <div class="col-s0 Matrix-Box">
 
     <h3>Matrix Part</h3>
     <p>After you enter the Column and Row number Please Click On Create Matrix Button</p>
+    <p style="color: red;">Zero and negative values for PC matrix elements are not allowed!</p>
 
   </div>
 

@@ -93,7 +93,8 @@ const CreateMat = (RowNum, ColumnNum) => {
   <button class="btn btn-default Kii-process" style="margin-top: 10px;">Process Kii</button> <strong><span class="Kii_result"></span></strong>
   </div>
   <div class="col-xs-1" id="geometric"></div>
-  <div class="col-xs-1" id="nor-geometric"></div>`;
+  <div class="col-xs-1" id="nor-geometric"></div>
+  `;
   divMatrix.innerHTML = MatContent;
 
   // const button = divMatrix.querySelector(".mt-process");
@@ -104,7 +105,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   // initialize geometrix mean column
   let MatContentMul = ``;
   MatContentMul += `<div class="col-12">
-  <p>GM</p>`;
+  <abbr title="Geometric Mean">GM</abbr>`;
   for (let i = 0; i < ColumnNum; i++) {
     MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
     <br/></div>`;
@@ -114,7 +115,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   // initialize normalized geometrix mean column
   let nor_MatContentMul = ``;
   nor_MatContentMul += `<div class="col-12">
-  <p>N_GM</p>`;
+  <abbr title="Normalized Geometric Mean">N_GM</abbr>`;
   let geo_means = [];
   let sum = 0;
 

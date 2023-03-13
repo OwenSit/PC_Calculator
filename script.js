@@ -6,18 +6,18 @@ const backpackList = () => {
   backpackArticle.innerHTML = `
 
   <div class="row">
-  <div class="col-sm-2">
+  <div class="col-sm-1">
   <div class="form-group">
   <strong>Matrix Size:</strong>
   <label for="Size"></label>
-  <input type="number" name="Size" class="form-control Size" >
+  <input type="number" name="Size" class="form-control Size" style="margin-top: 15px; width: 100px">
 </div>
 
 <button class="btn btn-default lid-toggle m-0">Create Matrix</button>
   </div>
   <div class="col-sm-10 Matrix-Box">
 
-    <h3>Matrix Part</h3>
+    <h3 style="margin:0;">Matrix Part</h3>
     <p>After you enter the Column and Row number Please Click On Create Matrix Button</p>
     <p style="color: red;">Zero and negative values for PC matrix elements are not allowed!</p>
 
@@ -37,9 +37,9 @@ const backpackList = () => {
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
     // add data validation:
-    if (Row < 3 || !Number.isInteger(Number(Row.value))) {
+    if (Row.value < 3 || !Number.isInteger(Number(Row.value)) || Row.value > 8) {
       console.log(Row.value);
-      alert('⚠ - Please enter an integer value that is greater than or equal to 3');
+      alert('⚠ - Please enter an integer value x that is between 3 and 8');
       window.location.reload();
     }
     else {
@@ -56,13 +56,23 @@ const backpackList = () => {
 const CreateMat = (RowNum, ColumnNum) => {
   let divMatrix = document.createElement("div");
   divMatrix.classList.add("Matrix");
+  let size = 3;
+  if(RowNum < 5){
+    size = 3;
+  }
+  else if(RowNum < 6) {
+    size = 4;
+  }
+  else {
+    size = 6;
+  }
   let MatContent = `
   <div class="row">
-  <div class="col-xs-6">
-  <p>PC (pairwise comparisons) Matrix</p> 
   `;
+  MatContent += `<div class="col-xs-${size}">`;
+  MatContent += `<p>PC (pairwise comparisons) Matrix</p> `;
   for (let i = 0; i < ColumnNum; i++) {
-    MatContent += `<div class="col-12">`;
+    MatContent += `<div class="col-xs-12">`;
     for (let j = 0; j < RowNum; j++) {
       if (i < j) {
         MatContent += `<input type="number" name="mt${i}${j}" class="Mat" id="mt${i}${j}" value="1">`;
@@ -80,11 +90,10 @@ const CreateMat = (RowNum, ColumnNum) => {
 
   // <button class="btn btn-default mt-process">Process Geometric Mean</button>
   MatContent += `
-
-  <button class="btn btn-default Kii-process">Process Kii</button> <strong><span class="Kii_result"></span></strong>
+  <button class="btn btn-default Kii-process" style="margin-top: 10px;">Process Kii</button> <strong><span class="Kii_result"></span></strong>
   </div>
-  <div class="col-xs-3" id="geometric"></div>
-  <div class="col-xs-3" id="nor-geometric"></div>`;
+  <div class="col-xs-1" id="geometric"></div>
+  <div class="col-xs-1" id="nor-geometric"></div>`;
   divMatrix.innerHTML = MatContent;
 
   // const button = divMatrix.querySelector(".mt-process");
@@ -95,7 +104,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   // initialize geometrix mean column
   let MatContentMul = ``;
   MatContentMul += `<div class="col-12">
-  <p>Geometric Mean</p>`;
+  <p>GM</p>`;
   for (let i = 0; i < ColumnNum; i++) {
     MatContentMul += `<input type="number" value="1" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
     <br/></div>`;
@@ -105,7 +114,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   // initialize normalized geometrix mean column
   let nor_MatContentMul = ``;
   nor_MatContentMul += `<div class="col-12">
-  <p>Normalized Geometric Mean</p>`;
+  <p>N_GM</p>`;
   let geo_means = [];
   let sum = 0;
 

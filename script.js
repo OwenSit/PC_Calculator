@@ -37,8 +37,7 @@ const backpackList = () => {
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
     // add data validation:
-    if (Row < 3 || Number.isInteger(Number(Row.value))) {
-
+    if (Row < 3 || !Number.isInteger(Number(Row.value))) {
       console.log(Row.value);
       alert('⚠ - Please enter an integer value that is greater than or equal to 3');
       window.location.reload();

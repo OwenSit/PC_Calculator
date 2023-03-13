@@ -35,14 +35,15 @@ const backpackList = () => {
   // handle "create matrix" button
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
-    let RowNum = Row.value;
-    let ColumnNum = RowNum;
+    let RowNumText = Row;
     // add data validation:
-    if (RowNum < 3) {
+    if (RowNumText.value < 3 || !Number.isInteger(RowNumText)) {
       alert('⚠ - Please enter an integer value that is greater than or equal to 3');
       window.location.reload();
     }
     else {
+      let RowNum = RowNumText.value;
+      let ColumnNum = RowNum;
       MatrixDiv.append(CreateMat(RowNum, ColumnNum));
     }
   });

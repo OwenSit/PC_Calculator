@@ -13,9 +13,9 @@ const backpackList = () => {
   <input type="number" name="Size" class="form-control Size" >
 </div>
 
-<button class="btn btn-default lid-toggle">Create Matrix</button>
+<button class="btn btn-default lid-toggle m-0">Create Matrix</button>
   </div>
-  <div class="col-s0 Matrix-Box">
+  <div class="col-sm-10 Matrix-Box">
 
     <h3>Matrix Part</h3>
     <p>After you enter the Column and Row number Please Click On Create Matrix Button</p>
@@ -37,7 +37,7 @@ const backpackList = () => {
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
     // add data validation:
-    if (Row < 3 || !Number.isInteger(Number(Row.value))) {
+    if (Row < 3 || Number.isInteger(Number(Row.value))) {
 
       console.log(Row.value);
       alert('⚠ - Please enter an integer value that is greater than or equal to 3');
@@ -60,7 +60,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   let MatContent = `
   <div class="row">
   <div class="col-xs-6">
-  <p>Pairwise Comparison Matrix</p> 
+  <p>PC (pairwise comparisons) Matrix</p> 
   `;
   for (let i = 0; i < ColumnNum; i++) {
     MatContent += `<div class="col-12">`;

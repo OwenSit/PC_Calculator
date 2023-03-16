@@ -56,21 +56,21 @@ const backpackList = () => {
 const CreateMat = (RowNum, ColumnNum) => {
   let divMatrix = document.createElement("div");
   divMatrix.classList.add("Matrix");
-  let size = 3;
-  if(RowNum < 5){
-    size = 3;
-  }
-  else if(RowNum < 6) {
-    size = 4;
-  }
-  else {
-    size = 6;
-  }
+  let size = 5;
+  // if(RowNum < 5){
+  //   size = 3;
+  // }
+  // else if(RowNum < 6) {
+  //   size = 4;
+  // }
+  // else {
+  //   size = 6;
+  // }
   let MatContent = `
   <div class="row">
   `;
-  MatContent += `<div class="col-xs-${size}">`;
-  MatContent += `<p>PC (pairwise comparisons) Matrix</p> `;
+  MatContent += `<div class="col-xs-${size} text-center">`;
+  MatContent += `<p style="margin-bottom:0;">PC (pairwise comparisons) Matrix</p> `;
   for (let i = 0; i < ColumnNum; i++) {
     MatContent += `<div class="col-xs-12">`;
     for (let j = 0; j < RowNum; j++) {
@@ -92,8 +92,8 @@ const CreateMat = (RowNum, ColumnNum) => {
   MatContent += `
   <button class="btn btn-default Kii-process" style="margin-top: 10px;">Process Kii</button> <strong><span class="Kii_result"></span></strong>
   </div>
-  <div class="col-xs-1" id="geometric"></div>
-  <div class="col-xs-1" id="nor-geometric"></div>
+  <div class="col-xs-1 text-center" id="geometric"></div>
+  <div class="col-xs-1 text-center" id="nor-geometric"></div>
   `;
   divMatrix.innerHTML = MatContent;
 
@@ -148,7 +148,7 @@ const CreateMat = (RowNum, ColumnNum) => {
       let MatContentMul = ``;
       geometric.replaceChildren();
       MatContentMul += `<div class="col-12">
-    <p>Geometric Mean</p>`;
+      <abbr title="Geometric Mean">GM</abbr>`;
       let geo_means = [];
       for (let i = 0; i < ColumnNum; i++) {
         let mul = 1;
@@ -170,7 +170,7 @@ const CreateMat = (RowNum, ColumnNum) => {
       let nor_MatContentMul = ``;
       nor_geometric.replaceChildren();
       nor_MatContentMul += `<div class="col-12">
-  <p>Normalized Geometric Mean</p>`;
+      <abbr title="Normalized Geometric Mean">N_GM</abbr>`;
       for (let i = 0; i < ColumnNum; i++) {
         let nor = (Math.round((geo_means[i] / new_sum) * 100) / 100).toFixed(2);
         nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="Mat" id="nor_gm${i}"  disabled>

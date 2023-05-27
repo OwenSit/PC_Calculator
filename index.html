@@ -21,30 +21,49 @@
       }
     </style>
     <script type="module" src="script.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
   </head>
 
   <body>
     <div class="text-center">
       <h3>Online PC (Pairwise Comparisons) Matrix Calculator</h3>
-      <br><br/>
+      <br /><br />
     </div>
 
-    <div class="container maincontent" style="
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 80%;
-    width: 100%;
-    margin-left: 20%;
-    "></div>
-    <footer class="container-fluid text-center" style="
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 100px;
-    width: 100%;
-    overflow: hidden;">
+    <div
+      class="container maincontent"
+      style="
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 90%;
+        width: 100%;
+        margin-left: 20%;
+      "
+    ></div>
+    <div
+      id="treemap"
+      style="
+        position: absolute;
+        left: 0;
+        padding-top: 0;
+        bottom: 0;
+        height: 50%;
+        width: 50%;
+        margin-left: 25%;
+      "
+    ></div>
+    <div
+      class="container-fluid text-center"
+      style="
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 20px;
+        width: 100%;
+        /* overflow: hidden; */
+      "
+    >
       <p>
         designer: Waldemar W. Koczkodaj, PhD,
         <br />
@@ -52,6 +71,6 @@
         <br />
         Javascript developer: Majid Piramoon
       </p>
-    </footer>
+    </div>
   </body>
 </html>

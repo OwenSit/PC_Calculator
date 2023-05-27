@@ -37,12 +37,15 @@ const backpackList = () => {
   button.addEventListener("click", () => {
     MatrixDiv.innerHTML = "";
     // add data validation:
-    if (Row.value < 3 || !Number.isInteger(Number(Row.value)) || Row.value > 8) {
+    if (
+      Row.value < 3 ||
+      !Number.isInteger(Number(Row.value)) ||
+      Row.value > 8
+    ) {
       console.log(Row.value);
-      alert('⚠ - Please enter an integer value x that is between 3 and 8');
+      alert("⚠ - Please enter an integer value x that is between 3 and 8");
       window.location.reload();
-    }
-    else {
+    } else {
       let RowNum = Row.value;
       let ColumnNum = RowNum;
       MatrixDiv.append(CreateMat(RowNum, ColumnNum));
@@ -117,8 +120,24 @@ const CreateMat = (RowNum, ColumnNum) => {
   nor_MatContentMul += `<div class="col-12">
   <abbr title="Normalized Geometric Mean">N_GM</abbr>`;
   let geo_means = [];
-  let sum = 0;
+  let nor_geo_means = [1.0];
+  let nor = (1.0 / ColumnNum).toFixed(2);
+  for (let i = 0; i < ColumnNum; i++) {
+    nor_geo_means.push(nor);
+  }
+  const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+  const alphabet = alpha.map((x) => String.fromCharCode(x));
+  let labels = ["Root"];
+  for (let i = 0; i < ColumnNum; i++) {
+    labels.push(alphabet[i]);
+  }
 
+  let parents = [""];
+  for (let i = 0; i < ColumnNum; i++) {
+    parents.push("Root");
+  }
+
+  let sum = 0;
   // acquire data from the geometric mean column and store them in geo_means
   for (let i = 0; i < ColumnNum; i++) {
     geo_means[i] = divMatrix.querySelector(`#gm${i}`).value;
@@ -171,13 +190,37 @@ const CreateMat = (RowNum, ColumnNum) => {
       nor_geometric.replaceChildren();
       nor_MatContentMul += `<div class="col-12">
       <abbr title="Normalized Geometric Mean">N_GM</abbr>`;
+      nor_geo_means = [1.0];
+      let sum = 0;
       for (let i = 0; i < ColumnNum; i++) {
         let nor = (Math.round((geo_means[i] / new_sum) * 100) / 100).toFixed(2);
+        // console.log(`${nor}\n`)
+        sum += nor;
+        nor_geo_means.push(nor);
         nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="Mat" id="nor_gm${i}"  disabled>
     <br/></div>`;
       }
+      for (let i = 1; i < ColumnNum + 1; i++) {
+        sum += parseFloat(nor_geo_means[i]);
+      }
+      nor_geo_means[0] = sum;
+      console.log(
+        `labels is ${labels}\n parents is ${parents}\n values is ${nor_geo_means}\n`
+      );
       nor_geometric.innerHTML = nor_MatContentMul;
       geometric.innerHTML = MatContentMul;
+      var data = [
+        {
+          type: "treemap",
+          labels: labels,
+          parents: parents,
+          values: nor_geo_means,
+          textinfo: "label+percent parent",
+          domain: { x: [1, 2] },
+          branchvalues: "total",
+        },
+      ];
+      Plotly.newPlot("treemap", data);
     });
   });
 

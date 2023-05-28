@@ -49,6 +49,44 @@ const backpackList = () => {
       let RowNum = Row.value;
       let ColumnNum = RowNum;
       MatrixDiv.append(CreateMat(RowNum, ColumnNum));
+      // insert treemap module here:
+      let nor_geo_means = [1.0];
+      let nor = (1.0 / ColumnNum).toFixed(2);
+      for (let i = 0; i < ColumnNum; i++) {
+        nor_geo_means.push(nor);
+      }
+      const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+      const alphabet = alpha.map((x) => String.fromCharCode(x));
+      let labels = ["Root"];
+      for (let i = 0; i < ColumnNum; i++) {
+        labels.push(alphabet[i]);
+      }
+
+      let parents = [""];
+      for (let i = 0; i < ColumnNum; i++) {
+        parents.push("Root");
+      }
+
+      let sum = 0;
+      for (let i = 1; i < ColumnNum + 1; i++) {
+        sum += parseFloat(nor_geo_means[i]);
+      }
+      nor_geo_means[0] = sum;
+      console.log(
+        `labels is ${labels}\n parents is ${parents}\n values is ${nor_geo_means}\n`
+      );
+      var data = [
+        {
+          type: "treemap",
+          labels: labels,
+          parents: parents,
+          values: nor_geo_means,
+          textinfo: "label+percent parent",
+          domain: { x: [1, 2] },
+          branchvalues: "total",
+        },
+      ];
+      Plotly.newPlot("treemap", data);
     }
   });
 

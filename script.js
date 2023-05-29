@@ -325,7 +325,7 @@ const CreateMat = (RowNum, ColumnNum) => {
     resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
       Number(indexes[0]) + 1
     }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad`;
-    nextKiiButton.innerHTML = `<button id="next-Kii" class="btn btn-default" style="margin-top: 10px;">Next Kii</button>`;
+    nextKiiButton.innerHTML = `<button id="next-Kii" class="btn btn-default" style="margin-top: 10px;">Next Most Inconsistent Triad</button>`;
     //allTxt.style.backgroundColor = "#ffff00";
     for (let i = 0; i < RowNum; i++) {
       for (let j = 0; j < RowNum; j++) {
@@ -346,11 +346,15 @@ const CreateMat = (RowNum, ColumnNum) => {
     if (nextKiiCounter >= Object.keys(dict).length) {
       // console.log("hello");
       document.getElementById("next-Kii").disabled = true;
+      document.getElementById("next-Kii").textContent =
+        "This is the last traid!";
     }
     let findNext = () => {
       if (nextKiiCounter + 1 >= Object.keys(dict).length) {
         // console.log("hello");
         document.getElementById("next-Kii").disabled = true;
+        document.getElementById("next-Kii").textContent =
+          "This is the last traid!";
       }
       // console.log("nextKii is clicked.");
       finditem.value = -1;

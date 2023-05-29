@@ -132,6 +132,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   // <button class="btn btn-default mt-process">Process Geometric Mean</button>
   MatContent += `
   <button class="btn btn-default Kii-process" style="margin-top: 10px;">Process Kii</button> <strong><span class="Kii_result"></span></strong>
+  <div id="next-Kii-div"></div>
   </div>
   <div class="col-xs-1 text-center" id="geometric"></div>
   <div class="col-xs-1 text-center" id="nor-geometric"></div>
@@ -288,6 +289,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   const buttonKii = divMatrix.querySelector(".Kii-process");
 
   buttonKii.addEventListener("click", () => {
+    let nextKiiCounter = 1;
     var dict = [];
     for (let i = 0; i < ColumnNum; i++) {
       for (let j = 0; j < ColumnNum; j++) {
@@ -306,22 +308,25 @@ const CreateMat = (RowNum, ColumnNum) => {
         }
       }
     }
-
+    console.log(dict);
     let finditem = dict[0];
     dict.forEach((item) => {
       if (item.value > finditem.value) {
         finditem = item;
       }
     });
+    console.log(finditem);
     let indexes = finditem.key.split(",");
     let firstTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[1]}`);
     let secondTxt = divMatrix.querySelector(`#mt${indexes[1]}${indexes[2]}`);
     let thirdTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[2]}`);
     let allTxt = divMatrix.querySelector(`#mt01`);
     let resultShow = divMatrix.querySelector(".Kii_result");
+    let nextKiiButton = divMatrix.querySelector("#next-Kii-div");
     resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
       Number(indexes[0]) + 1
     }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad`;
+    nextKiiButton.innerHTML = `<button id="next-Kii" class="btn btn-default" style="margin-top: 10px;">Next Kii</button>`;
     //allTxt.style.backgroundColor = "#ffff00";
     for (let i = 0; i < RowNum; i++) {
       for (let j = 0; j < RowNum; j++) {
@@ -338,6 +343,55 @@ const CreateMat = (RowNum, ColumnNum) => {
       secondTxt.style.backgroundColor = "#ffcbcb";
       thirdTxt.style.backgroundColor = "#ffcbcb";
     }
+    let nextKii = divMatrix.querySelector("#next-Kii");
+    if (nextKiiCounter >= Object.keys(dict).length) {
+      console.log("hello");
+      document.getElementById("next-Kii").disabled = true;
+    }
+    let findNext = () => {
+      if (nextKiiCounter + 1 >= Object.keys(dict).length) {
+        console.log("hello");
+        document.getElementById("next-Kii").disabled = true;
+      }
+      console.log("nextKii is clicked.");
+      finditem.value = -1;
+      finditem = dict[0];
+      dict.forEach((item) => {
+        if (item.value > finditem.value) {
+          finditem = item;
+        }
+      });
+      nextKiiCounter += 1;
+      indexes = finditem.key.split(",");
+      firstTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[1]}`);
+      secondTxt = divMatrix.querySelector(`#mt${indexes[1]}${indexes[2]}`);
+      thirdTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[2]}`);
+      allTxt = divMatrix.querySelector(`#mt01`);
+      resultShow = divMatrix.querySelector(".Kii_result");
+      resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
+        Number(indexes[0]) + 1
+      }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad`;
+      console.log(dict);
+
+      for (let i = 0; i < RowNum; i++) {
+        for (let j = 0; j < RowNum; j++) {
+          divMatrix.querySelector(`#mt${i}${j}`).style.backgroundColor =
+            "#ffffff";
+        }
+      }
+      if (finditem.value.toFixed(2) <= 0.33) {
+        firstTxt.style.backgroundColor = "#90ee90";
+        secondTxt.style.backgroundColor = "#90ee90";
+        thirdTxt.style.backgroundColor = "#90ee90";
+      } else {
+        firstTxt.style.backgroundColor = "#ffcbcb";
+        secondTxt.style.backgroundColor = "#ffcbcb";
+        thirdTxt.style.backgroundColor = "#ffcbcb";
+      }
+      console.log(nextKiiCounter);
+    };
+    nextKii.addEventListener("click", findNext);
+    console.log(`size of the dict is ${Object.keys(dict).length}`);
   });
 
   return divMatrix;

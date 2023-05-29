@@ -131,7 +131,7 @@ const CreateMat = (RowNum, ColumnNum) => {
 
   // <button class="btn btn-default mt-process">Process Geometric Mean</button>
   MatContent += `
-  <button class="btn btn-default Kii-process" style="margin-top: 10px;">Process Kii</button> <strong><span class="Kii_result"></span></strong>
+  <button class="btn btn-default Kii-process" style="margin-top: 10px;">(Re)Process Kii</button> <strong><span class="Kii_result"></span></strong>
   <div id="next-Kii-div"></div>
   </div>
   <div class="col-xs-1 text-center" id="geometric"></div>

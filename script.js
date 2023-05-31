@@ -453,6 +453,9 @@ const CreateMat = (RowNum, ColumnNum) => {
         triadReduced[1].toFixed(2);
       divMatrix.querySelector(`#mt${indexes[0]}${indexes[2]}`).value =
         triadReduced[2].toFixed(2);
+      document.getElementById("disBasedReduceButton").disabled = true;
+      document.getElementById("disBasedReduceButton").textContent =
+        "Reevaluation required!";
       console.log(triadReduced);
     });
     let matrixArray = [];

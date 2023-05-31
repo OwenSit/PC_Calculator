@@ -1,3 +1,38 @@
+//distance-based inconsistency reduction algorithm
+let DisBasedReduct = (x, y, z) => {
+  x = parseFloat(x);
+  y = parseFloat(y);
+  z = parseFloat(z);
+  let isSmaller = x * y < z ? 1 : 0;
+  let a = x * y;
+  let b1 = z + 2 * x * y;
+  let b2 = -1 * b1;
+  let c = x * y - z;
+  let solution = 0;
+
+  let dis = b1 ** 2 - 4 * a * c;
+  let sqr_dis = Math.sqrt(dis);
+  if (isSmaller) {
+    let s1 = (-1 * b1 + sqr_dis) / (2 * a);
+    let s2 = (-1 * b1 - sqr_dis) / (2 * a);
+    if (s1 > 0) {
+      solution = (Math.round(s1 * 100) / 100).toFixed(2);
+    } else {
+      solution = (Math.round(s2 * 100) / 100).toFixed(2);
+    }
+    return [x + x * solution, y + y * solution, z - z * solution];
+  } else {
+    let s1 = (-1 * b2 + sqr_dis) / (2 * a);
+    let s2 = (-1 * b2 - sqr_dis) / (2 * a);
+    if (s1 > s2) {
+      solution = (Math.round(s2 * 100) / 100).toFixed(2);
+    } else {
+      solution = (Math.round(s1 * 100) / 100).toFixed(2);
+    }
+    return [x - x * solution, y - y * solution, z + z * solution];
+  }
+};
+
 const backpackList = () => {
   let backpackArticle = document.createElement("article");
   backpackArticle.classList.add("backpack");
@@ -130,8 +165,9 @@ const CreateMat = (RowNum, ColumnNum) => {
 
   // <button class="btn btn-default mt-process">Process Geometric Mean</button>
   MatContent += `
-  <button class="btn btn-default Kii-process" style="margin-top: 10px;">(Re)Process Kii</button> <strong><span class="Kii_result"></span></strong>
+  <button class="btn btn-default Kii-process" style="margin-top: 10px;">(Re)Evaluate Kii</button> <strong><span class="Kii_result"></span></strong>
   <div id="next-Kii-div"></div>
+  <div id="dis-based-reduce"></div>
   </div>
   <div class="col-xs-1 text-center" id="geometric"></div>
   <div class="col-xs-1 text-center" id="nor-geometric"></div>
@@ -322,10 +358,12 @@ const CreateMat = (RowNum, ColumnNum) => {
     let allTxt = divMatrix.querySelector(`#mt01`);
     let resultShow = divMatrix.querySelector(".Kii_result");
     let nextKiiButton = divMatrix.querySelector("#next-Kii-div");
+    let disBasedReduceButton = divMatrix.querySelector("#dis-based-reduce");
     resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
       Number(indexes[0]) + 1
     }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad`;
     nextKiiButton.innerHTML = `<button id="next-Kii" class="btn btn-default" style="margin-top: 10px;">Next Most Inconsistent Triad</button>`;
+    disBasedReduceButton.innerHTML = `<button id="disBasedReduceButton" class="btn btn-default" style="margin-top: 10px;"><abbr title="Distance Based Inconsistency Reduction">DBIR</button>`;
     //allTxt.style.backgroundColor = "#ffff00";
     for (let i = 0; i < RowNum; i++) {
       for (let j = 0; j < RowNum; j++) {
@@ -348,6 +386,11 @@ const CreateMat = (RowNum, ColumnNum) => {
       document.getElementById("next-Kii").disabled = true;
       document.getElementById("next-Kii").textContent =
         "This is the last traid!";
+    }
+    if (finditem.value < 0.33) {
+      document.getElementById("disBasedReduceButton").disabled = true;
+      document.getElementById("disBasedReduceButton").textContent =
+        "kii < 0.33!";
     }
     let findNext = () => {
       if (nextKiiCounter + 1 >= Object.keys(dict).length) {
@@ -398,6 +441,20 @@ const CreateMat = (RowNum, ColumnNum) => {
     // console.log(`The input values are:\n`);
 
     //transfer the matrix from web form to
+    disBasedReduceButton.addEventListener("click", () => {
+      let x = matrixArray[indexes[0]][indexes[1]];
+      let y = matrixArray[indexes[1]][indexes[2]];
+      let z = matrixArray[indexes[0]][indexes[2]];
+
+      let triadReduced = DisBasedReduct(x, y, z);
+      divMatrix.querySelector(`#mt${indexes[0]}${indexes[1]}`).value =
+        triadReduced[0].toFixed(2);
+      divMatrix.querySelector(`#mt${indexes[1]}${indexes[2]}`).value =
+        triadReduced[1].toFixed(2);
+      divMatrix.querySelector(`#mt${indexes[0]}${indexes[2]}`).value =
+        triadReduced[2].toFixed(2);
+      console.log(triadReduced);
+    });
     let matrixArray = [];
     for (let i = 0; i < ColumnNum; i++) {
       let matrixRow = [];
@@ -406,11 +463,19 @@ const CreateMat = (RowNum, ColumnNum) => {
       }
       matrixArray.push(matrixRow);
     }
-    console.log(finditem);
-    console.log(indexes);
-    console.log(`a[i][j]: ${matrixArray[indexes[0]][indexes[1]]}`);
-    console.log(`a[j][k]: ${matrixArray[indexes[1]][indexes[2]]}`);
-    console.log(`a[i][k]: ${matrixArray[indexes[0]][indexes[2]]}`);
+    // if (finditem.value > 0.33) {
+    //   let x = matrixArray[indexes[0]][indexes[1]];
+    //   let y = matrixArray[indexes[1]][indexes[2]];
+    //   let z = matrixArray[indexes[0]][indexes[2]];
+
+    //   let triadReduced = DisBasedReduct(x, y, z);
+    //   console.log(triadReduced);
+    // }
+    // console.log(finditem);
+    // console.log(indexes);
+    // console.log(`a[i][j]: ${matrixArray[indexes[0]][indexes[1]]}`);
+    // console.log(`a[j][k]: ${matrixArray[indexes[1]][indexes[2]]}`);
+    // console.log(`a[i][k]: ${matrixArray[indexes[0]][indexes[2]]}`);
   });
 
   return divMatrix;

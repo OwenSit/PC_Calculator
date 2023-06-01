@@ -227,76 +227,95 @@ const CreateMat = (RowNum, ColumnNum) => {
   nor_geometric.innerHTML = nor_MatContentMul;
 
   // calculating the 1/(new value) when changes detected
-  const ChangeInput = divMatrix.querySelectorAll(".Mat");
-  ChangeInput.forEach((item) => {
-    item.addEventListener("change", (event) => {
-      let id = event.target.id.replace("mt", "");
-      // console.log(id[0]);
-      let rowNum = id[0];
-      id = id.split("").reverse().join("");
-      let otherTxt = divMatrix.querySelector(`#mt${id}`);
-      otherTxt.value = (
-        Math.round((1 / event.target.value) * 100) / 100
-      ).toFixed(2);
-      let MatContentMul = ``;
-      geometric.replaceChildren();
-      MatContentMul += `<div class="col-12">
-      <abbr title="Geometric Mean">GM</abbr>`;
-      let geo_means = [];
-      for (let i = 0; i < ColumnNum; i++) {
-        let mul = 1;
-        for (let j = 0; j < RowNum; j++) {
+
+  function onActivityChange() {
+    // item.addEventListener("change", (event) => {
+    // let id = event.target.id.replace("mt", "");
+    // console.log(id);
+    // let rowNum = id[0];
+    // get the diaognal position of the changing position
+    // id = id.split("").reverse().join("");
+    // console.log(`reversed ID = ${id}`);
+
+    for (let i = 0; i < ColumnNum; i++) {
+      for (let j = 0; j < ColumnNum; j++) {
+        if (i > j) {
           let otherTxt = divMatrix.querySelector(`#mt${i}${j}`);
-          mul = mul * otherTxt.value;
+          let oriTxt = divMatrix.querySelector(`#mt${j}${i}`);
+          otherTxt.value = (Math.round((1 / oriTxt.value) * 100) / 100).toFixed(
+            2
+          );
         }
-        geo_means[i] = (
-          Math.round(Math.pow(mul, 1 / RowNum) * 100) / 100
-        ).toFixed(2);
-        MatContentMul += `<div class="col-12">
+      }
+    }
+
+    // let otherTxt = divMatrix.querySelector(`#mt${id}`);
+    // otherTxt.value = (
+    //   Math.round((1 / event.target.value) * 100) / 100
+    // ).toFixed(2);
+    let MatContentMul = ``;
+    geometric.replaceChildren();
+    MatContentMul += `<div class="col-12">
+      <abbr title="Geometric Mean">GM</abbr>`;
+    let geo_means = [];
+    for (let i = 0; i < ColumnNum; i++) {
+      let mul = 1;
+      for (let j = 0; j < RowNum; j++) {
+        let otherTxt = divMatrix.querySelector(`#mt${i}${j}`);
+        mul = mul * otherTxt.value;
+      }
+      geo_means[i] = (
+        Math.round(Math.pow(mul, 1 / RowNum) * 100) / 100
+      ).toFixed(2);
+      MatContentMul += `<div class="col-12">
       <input type="number" value="${geo_means[i]}" name="gm${i}" class="Mat geo_col" id="gm${i}"  disabled>
       <br/></div>`;
-      }
-      let new_sum = 0;
-      for (let i = 0; i < ColumnNum; i++) {
-        new_sum += parseFloat(geo_means[i]);
-      }
-      let nor_MatContentMul = ``;
-      nor_geometric.replaceChildren();
-      nor_MatContentMul += `<div class="col-12">
+    }
+    let new_sum = 0;
+    for (let i = 0; i < ColumnNum; i++) {
+      new_sum += parseFloat(geo_means[i]);
+    }
+    let nor_MatContentMul = ``;
+    nor_geometric.replaceChildren();
+    nor_MatContentMul += `<div class="col-12">
       <abbr title="Normalized Geometric Mean">N_GM</abbr>`;
-      nor_geo_means = [1.0];
-      let sum = 0;
-      for (let i = 0; i < ColumnNum; i++) {
-        let nor = (Math.round((geo_means[i] / new_sum) * 100) / 100).toFixed(2);
-        // console.log(`${nor}\n`)
-        sum += nor;
-        nor_geo_means.push(nor);
-        nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="Mat" id="nor_gm${i}"  disabled>
+    nor_geo_means = [1.0];
+    let sum = 0;
+    for (let i = 0; i < ColumnNum; i++) {
+      let nor = (Math.round((geo_means[i] / new_sum) * 100) / 100).toFixed(2);
+      // console.log(`${nor}\n`)
+      sum += nor;
+      nor_geo_means.push(nor);
+      nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="Mat" id="nor_gm${i}"  disabled>
     <br/></div>`;
-      }
-      for (let i = 1; i < ColumnNum + 1; i++) {
-        sum += parseFloat(nor_geo_means[i]);
-      }
-      nor_geo_means[0] = sum;
-      // console.log(
-      //   `labels is ${labels}\n parents is ${parents}\n values is ${nor_geo_means}\n`
-      // );
-      nor_geometric.innerHTML = nor_MatContentMul;
-      geometric.innerHTML = MatContentMul;
-      var data = [
-        {
-          type: "treemap",
-          labels: labels,
-          parents: parents,
-          values: nor_geo_means,
-          textinfo: "label+percent parent",
-          domain: { x: [1, 2] },
-          branchvalues: "total",
-        },
-      ];
-      Plotly.newPlot("treemap", data);
-    });
-  });
+    }
+    for (let i = 1; i < ColumnNum + 1; i++) {
+      sum += parseFloat(nor_geo_means[i]);
+    }
+    nor_geo_means[0] = sum;
+    // console.log(
+    //   `labels is ${labels}\n parents is ${parents}\n values is ${nor_geo_means}\n`
+    // );
+    nor_geometric.innerHTML = nor_MatContentMul;
+    geometric.innerHTML = MatContentMul;
+    var data = [
+      {
+        type: "treemap",
+        labels: labels,
+        parents: parents,
+        values: nor_geo_means,
+        textinfo: "label+percent parent",
+        domain: { x: [1, 2] },
+        branchvalues: "total",
+      },
+    ];
+    Plotly.newPlot("treemap", data);
+    // });
+  }
+  const ChangeInput = divMatrix.querySelectorAll(".Mat");
+  ChangeInput.forEach((item) =>
+    item.addEventListener("change", onActivityChange)
+  );
 
   // when "geometrix mean" button is clicked
   // button.addEventListener("click", () => {
@@ -429,6 +448,9 @@ const CreateMat = (RowNum, ColumnNum) => {
         firstTxt.style.backgroundColor = "#90ee90";
         secondTxt.style.backgroundColor = "#90ee90";
         thirdTxt.style.backgroundColor = "#90ee90";
+        document.getElementById("disBasedReduceButton").disabled = true;
+        document.getElementById("disBasedReduceButton").textContent =
+          "kii < 0.33!";
       } else {
         firstTxt.style.backgroundColor = "#ffcbcb";
         secondTxt.style.backgroundColor = "#ffcbcb";
@@ -456,6 +478,7 @@ const CreateMat = (RowNum, ColumnNum) => {
       document.getElementById("disBasedReduceButton").disabled = true;
       document.getElementById("disBasedReduceButton").textContent =
         "Reevaluation required!";
+      onActivityChange();
       console.log(triadReduced);
     });
     let matrixArray = [];

@@ -167,7 +167,8 @@ const CreateMat = (RowNum, ColumnNum) => {
 
   // <button class="btn btn-default mt-process">Process Geometric Mean</button>
   MatContent += `
-  <button class="btn btn-default Kii-process" style="margin-top: 10px;">(Re)Evaluate Kii</button> <strong><span class="Kii_result"></span></strong>
+  <!-- <button class="btn btn-default Kii-process" style="margin-top: 10px;">(Re)Evaluate Kii</button> <strong><span class="Kii_result"></span></strong> -->
+  <button class="btn btn-default Kii-process" style="margin-top: 10px;"><abbr title="Iteratively compute inconsistency (Kii)">Compute Kii</abbr></button> <strong><span class="Kii_result"></span></strong>
   <div id="next-Kii-div"></div>
   <div id="dis-based-reduce"></div>
   </div>
@@ -423,7 +424,7 @@ const CreateMat = (RowNum, ColumnNum) => {
     let disBasedReduceButton = divMatrix.querySelector("#dis-based-reduce");
     resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
       Number(indexes[0]) + 1
-    }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad`;
+    }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad.`;
     nextKiiButton.innerHTML = `<button id="next-Kii" class="btn btn-default" style="margin-top: 10px;">Next Most Inconsistent Triad</button>`;
     disBasedReduceButton.innerHTML = `<button id="disBasedReduceButton" class="btn btn-default" style="margin-top: 10px;"><abbr title="Distance Based Inconsistency Reduction">DBIR</button>`;
     //allTxt.style.backgroundColor = "#ffff00";
@@ -478,7 +479,7 @@ const CreateMat = (RowNum, ColumnNum) => {
       resultShow = divMatrix.querySelector(".Kii_result");
       resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
         Number(indexes[0]) + 1
-      }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad`;
+      }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad.`;
       // console.log(dict);
 
       for (let i = 0; i < RowNum; i++) {

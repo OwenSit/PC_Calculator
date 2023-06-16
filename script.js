@@ -115,7 +115,9 @@ const backpackList = () => {
           labels: labels,
           parents: parents,
           values: nor_geo_means,
-          textinfo: "label+percent parent",
+          textinfo:
+            "label+value+percent root+percent parent+percent entry+current path",
+          // textinfo: "label+percent parent",
           domain: { x: [1, 2] },
           branchvalues: "total",
         },
@@ -339,12 +341,15 @@ const CreateMat = (RowNum, ColumnNum) => {
         labels: labels,
         parents: parents,
         values: nor_geo_means,
-        textinfo: "label+percent parent",
+        textinfo:
+          "label+value+percent root+percent parent+percent entry+current path",
+        // textinfo: "label+percent parent",
         domain: { x: [1, 2] },
         branchvalues: "total",
       },
     ];
     Plotly.newPlot("treemap", data);
+    // document.getElementById("treemap").innerHTML = reason;
     // });
   }
   const ChangeInput = divMatrix.querySelectorAll(".Mat");

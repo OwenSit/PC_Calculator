@@ -44,7 +44,7 @@ const backpackList = () => {
   <div class="form-group">
   <strong>Matrix Size:</strong>
   <label for="Size"></label>
-  <input type="number" name="Size" class="form-control Size" style="margin-top: 15px; width: 100px">
+  <input type="number" name="Size" value=4 class="form-control Size" style="margin-top: 15px; width: 100px">
 </div>
 
 <button class="btn btn-default lid-toggle m-0">Create Matrix</button>
@@ -171,6 +171,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   </div>
   <div class="col-xs-1 text-center" id="geometric"></div>
   <div class="col-xs-1 text-center" id="nor-geometric"></div>
+  <div class="col-xs-1 text-center" id="parentSelect"></div>
   `;
   divMatrix.innerHTML = MatContent;
 
@@ -178,6 +179,7 @@ const CreateMat = (RowNum, ColumnNum) => {
   // const button_nor = divMatrix.querySelector(".nor-mt-process");
   const geometric = divMatrix.querySelector("#geometric");
   const nor_geometric = divMatrix.querySelector("#nor-geometric");
+  const parentSelectionHTML = divMatrix.querySelector("#parentSelect");
 
   // initialize geometrix mean column
   let MatContentMul = ``;
@@ -193,6 +195,11 @@ const CreateMat = (RowNum, ColumnNum) => {
   let nor_MatContentMul = ``;
   nor_MatContentMul += `<div class="col-12">
   <abbr title="Normalized Geometric Mean">N_GM</abbr>`;
+  //adding parent selection
+  let parentSelect = ``;
+  parentSelect += `<div class="col-12">
+  <abbr title="Choose parent node (default: Root)">Parent</abbr>`;
+
   let geo_means = [];
   let nor_geo_means = [1.0];
   let nor = (1.0 / ColumnNum).toFixed(2);
@@ -224,9 +231,37 @@ const CreateMat = (RowNum, ColumnNum) => {
     nor_MatContentMul += `<input type="number" value="${nor}" name="nor_gm${i}" class="Mat" id="nor_gm${i}"  disabled>
     <br/></div>`;
   }
+  for (let i = 0; i < ColumnNum; i++) {
+    // console.log(labels);
+    let parentSelectX = `<select style="margin:10px 0;" id="parent${i}" class="Parent">`;
+    for (let j = 0; j < labels.length; j++) {
+      if (i + 1 != j) {
+        parentSelectX += `<option value="${labels[j]}">${labels[j]}</option>`;
+      }
+    }
+    parentSelectX += `</select>
+    <br/></div>`;
+    parentSelect += parentSelectX;
+  }
   nor_geometric.innerHTML = nor_MatContentMul;
+  parentSelectionHTML.innerHTML = parentSelect;
+  // for (let i = 0; i < ColumnNum; i++) {
+  //   document
+  //     .getElementById(`parent${i}`)
+  //     .addEventListener("change", onParentChange(`${i}`));
+  // }
 
   // calculating the 1/(new value) when changes detected
+  let onParentChange = (index) => {
+    // console.log(index.target.id);
+    parents = [""];
+    for (let i = 0; i < ColumnNum; i++) {
+      let x = document.getElementById(`parent${i}`).value;
+      parents.push(x);
+    }
+    console.log(parents);
+    onActivityChange();
+  };
 
   function onActivityChange() {
     // item.addEventListener("change", (event) => {
@@ -316,7 +351,10 @@ const CreateMat = (RowNum, ColumnNum) => {
   ChangeInput.forEach((item) =>
     item.addEventListener("change", onActivityChange)
   );
-
+  const parentChange = divMatrix.querySelectorAll(".Parent");
+  parentChange.forEach((item) =>
+    item.addEventListener("change", onParentChange)
+  );
   // when "geometrix mean" button is clicked
   // button.addEventListener("click", () => {
   //   let MatContentMul = ``;

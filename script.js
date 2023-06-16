@@ -33,11 +33,11 @@ let DisBasedReduct = (x, y, z) => {
   }
 };
 
-const backpackList = () => {
-  let backpackArticle = document.createElement("article");
-  backpackArticle.classList.add("backpack");
+const PCCalculator = () => {
+  let PCCalculatorContent = document.createElement("PCCalculator");
+  PCCalculatorContent.classList.add("Calculator");
 
-  backpackArticle.innerHTML = `
+  PCCalculatorContent.innerHTML = `
 
   <div class="row">
   <div class="col-sm-1">
@@ -62,10 +62,10 @@ const backpackList = () => {
 
    `;
 
-  const button = backpackArticle.querySelector(".lid-toggle");
-  const Row = backpackArticle.querySelector(".Size");
+  const button = PCCalculatorContent.querySelector(".lid-toggle");
+  const Row = PCCalculatorContent.querySelector(".Size");
   // const Column = Row;
-  const MatrixDiv = backpackArticle.querySelector(".Matrix-Box");
+  const MatrixDiv = PCCalculatorContent.querySelector(".Matrix-Box");
 
   // handle "create matrix" button
   button.addEventListener("click", () => {
@@ -126,7 +126,7 @@ const backpackList = () => {
     }
   });
 
-  return backpackArticle;
+  return PCCalculatorContent;
 };
 
 // create matrix
@@ -552,4 +552,4 @@ const CreateMat = (RowNum, ColumnNum) => {
 };
 const main = document.querySelector(".maincontent");
 main.innerHTML = "";
-main.append(backpackList());
+main.append(PCCalculator());

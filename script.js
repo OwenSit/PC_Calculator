@@ -1,3 +1,228 @@
+var CSV = {};
+!(function (p) {
+  "use strict";
+  p.__type__ = "csv";
+  var o =
+    ("undefined" != typeof jQuery && jQuery.Deferred) ||
+    ("undefined" != typeof _ && _.Deferred) ||
+    function () {
+      var t,
+        n,
+        e = new Promise(function (e, r) {
+          (t = e), (n = r);
+        });
+      return {
+        resolve: t,
+        reject: n,
+        promise: function () {
+          return e;
+        },
+      };
+    };
+  (p.fetch = function (t) {
+    var n = new o();
+    if (t.file) {
+      var e = new FileReader(),
+        r = t.encoding || "UTF-8";
+      (e.onload = function (e) {
+        var r = p.extractFields(p.parse(e.target.result, t), t);
+        (r.useMemoryStore = !0),
+          (r.metadata = { filename: t.file.name }),
+          n.resolve(r);
+      }),
+        (e.onerror = function (e) {
+          n.reject({
+            error: {
+              message: "Failed to load file. Code: " + e.target.error.code,
+            },
+          });
+        }),
+        e.readAsText(t.file, r);
+    } else if (t.data) {
+      var i = p.extractFields(p.parse(t.data, t), t);
+      (i.useMemoryStore = !0), n.resolve(i);
+    } else if (t.url) {
+      (
+        window.fetch ||
+        function (e) {
+          var r = jQuery.get(e),
+            t = {
+              then: function (e) {
+                return r.done(e), t;
+              },
+              catch: function (e) {
+                return r.fail(e), t;
+              },
+            };
+          return t;
+        }
+      )(t.url)
+        .then(function (e) {
+          return e.text ? e.text() : e;
+        })
+        .then(function (e) {
+          var r = p.extractFields(p.parse(e, t), t);
+          (r.useMemoryStore = !0), n.resolve(r);
+        })
+        .catch(function (e, r) {
+          n.reject({
+            error: {
+              message:
+                "Failed to load file. " + e.statusText + ". Code: " + e.status,
+              request: e,
+            },
+          });
+        });
+    }
+    return n.promise();
+  }),
+    (p.extractFields = function (e, r) {
+      return !0 !== r.noHeaderRow && 0 < e.length
+        ? { fields: e[0], records: e.slice(1) }
+        : { records: e };
+    }),
+    (p.normalizeDialectOptions = function (e) {
+      var r = {
+        delimiter: ",",
+        doublequote: !0,
+        lineterminator: "\n",
+        quotechar: '"',
+        skipinitialspace: !0,
+        skipinitialrows: 0,
+      };
+      for (var t in e)
+        "trim" === t
+          ? (r.skipinitialspace = e.trim)
+          : (r[t.toLowerCase()] = e[t]);
+      return r;
+    }),
+    (p.parse = function (e, r) {
+      (r && (!r || r.lineterminator)) || (e = p.normalizeLineTerminator(e, r));
+      var t,
+        n,
+        i = p.normalizeDialectOptions(r);
+      (t = e),
+        (n = i.lineterminator),
+        (e =
+          t.charAt(t.length - n.length) !== n
+            ? t
+            : t.substring(0, t.length - n.length));
+      var o,
+        a,
+        l = "",
+        s = !1,
+        u = !1,
+        c = "",
+        f = [],
+        d = [];
+      for (
+        a = function (e) {
+          return (
+            !0 !== u &&
+              ("" === e ? (e = null) : !0 === i.skipinitialspace && (e = v(e)),
+              h.test(e)
+                ? (e = parseInt(e, 10))
+                : m.test(e) && (e = parseFloat(e, 10))),
+            e
+          );
+        },
+          o = 0;
+        o < e.length;
+        o += 1
+      )
+        (l = e.charAt(o)),
+          !1 !== s || (l !== i.delimiter && l !== i.lineterminator)
+            ? l !== i.quotechar
+              ? (c += l)
+              : s
+              ? e.charAt(o + 1) === i.quotechar
+                ? ((c += i.quotechar), (o += 1))
+                : (s = !1)
+              : (u = s = !0)
+            : ((c = a(c)),
+              f.push(c),
+              l === i.lineterminator && (d.push(f), (f = [])),
+              (c = ""),
+              (u = !1));
+      return (
+        (c = a(c)),
+        f.push(c),
+        d.push(f),
+        i.skipinitialrows && (d = d.slice(i.skipinitialrows)),
+        d
+      );
+    }),
+    (p.normalizeLineTerminator = function (e, r) {
+      return (r = r || {}).lineterminator
+        ? e
+        : e.replace(/(\r\n|\n|\r)/gm, "\n");
+    }),
+    (p.objectToArray = function (e) {
+      for (var r = [], t = [], n = [], i = 0; i < e.fields.length; i++) {
+        var o = e.fields[i].id;
+        n.push(o);
+        var a = e.fields[i].label ? e.fields[i].label : o;
+        t.push(a);
+      }
+      r.push(t);
+      for (i = 0; i < e.records.length; i++) {
+        for (var l = [], s = e.records[i], u = 0; u < n.length; u++)
+          l.push(s[n[u]]);
+        r.push(l);
+      }
+      return r;
+    }),
+    (p.serialize = function (e, r) {
+      var t = null;
+      t = e instanceof Array ? e : p.objectToArray(e);
+      var n,
+        i,
+        o,
+        a = p.normalizeDialectOptions(r),
+        l = "",
+        s = "",
+        u = "",
+        c = "";
+      for (
+        o = function (e) {
+          return (
+            null === e
+              ? (e = "")
+              : "string" == typeof e && f.test(e)
+              ? (a.doublequote && (e = e.replace(/"/g, '""')),
+                (e = a.quotechar + e + a.quotechar))
+              : "number" == typeof e && (e = e.toString(10)),
+            e
+          );
+        },
+          n = 0;
+        n < t.length;
+        n += 1
+      )
+        for (l = t[n], i = 0; i < l.length; i += 1)
+          (s = o(l[i])),
+            i === l.length - 1
+              ? ((c += (u += s) + a.lineterminator), (u = ""))
+              : (u += s + a.delimiter),
+            (s = "");
+      return c;
+    });
+  var h = /^\d+$/,
+    m = /^\d*\.\d+$|^\d+\.\d*$/,
+    f = /^\s|\s$|,|"|\n/,
+    v = String.prototype.trim
+      ? function (e) {
+          return e.trim();
+        }
+      : function (e) {
+          return e.replace(/^\s*/, "").replace(/\s*$/, "");
+        };
+})(CSV);
+var recline = recline || {};
+(recline.Backend = recline.Backend || {}),
+  (recline.Backend.CSV = CSV),
+  "undefined" != typeof module && module.exports && (module.exports = CSV);
+
 //distance-based inconsistency reduction algorithm
 let DisBasedReduct = (x, y, z) => {
   x = parseFloat(x);
@@ -169,8 +394,11 @@ const CreateMat = (RowNum, ColumnNum) => {
   MatContent += `
   <!-- <button class="btn btn-default Kii-process" style="margin-top: 10px;">(Re)Evaluate Kii</button> <strong><span class="Kii_result"></span></strong> -->
   <button class="btn btn-default Kii-process" style="margin-top: 10px;"><abbr title="Iteratively compute inconsistency (Kii)">Compute Kii</abbr></button> <strong><span class="Kii_result"></span></strong>
-  <div id="next-Kii-div"></div>
-  <div id="dis-based-reduce"></div>
+  <div>
+  <span id="save-csv-div"></span>
+  <span id="next-Kii-div"></span>
+  <span id="dis-based-reduce"></span>
+  </div>
   </div>
   <div class="col-xs-1 text-center" id="geometric"></div>
   <div class="col-xs-1 text-center" id="nor-geometric"></div>
@@ -420,11 +648,13 @@ const CreateMat = (RowNum, ColumnNum) => {
     let thirdTxt = divMatrix.querySelector(`#mt${indexes[0]}${indexes[2]}`);
     let allTxt = divMatrix.querySelector(`#mt01`);
     let resultShow = divMatrix.querySelector(".Kii_result");
+    let saveCSVButton = divMatrix.querySelector("#save-csv-div");
     let nextKiiButton = divMatrix.querySelector("#next-Kii-div");
     let disBasedReduceButton = divMatrix.querySelector("#dis-based-reduce");
     resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
       Number(indexes[0]) + 1
     }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad.`;
+    saveCSVButton.innerHTML = `<button id="save-csv" class="btn btn-default" style="margin-top: 10px;">Save to CSV File</button>`;
     nextKiiButton.innerHTML = `<button id="next-Kii" class="btn btn-default" style="margin-top: 10px;">Next Most Inconsistent Triad</button>`;
     disBasedReduceButton.innerHTML = `<button id="disBasedReduceButton" class="btn btn-default" style="margin-top: 10px;"><abbr title="Distance Based Inconsistency Reduction">DBIR</button>`;
     //allTxt.style.backgroundColor = "#ffff00";
@@ -444,6 +674,7 @@ const CreateMat = (RowNum, ColumnNum) => {
       thirdTxt.style.backgroundColor = "#ffcbcb";
     }
     let nextKii = divMatrix.querySelector("#next-Kii");
+    let saveCSV = divMatrix.querySelector("#save-csv");
     if (nextKiiCounter >= Object.keys(dict).length) {
       // console.log("hello");
       document.getElementById("next-Kii").disabled = true;
@@ -533,6 +764,36 @@ const CreateMat = (RowNum, ColumnNum) => {
       }
       matrixArray.push(matrixRow);
     }
+
+    let save_geo_means = [];
+    let save_nor_geo_means = nor_geo_means.slice(1, ColumnNum + 1);
+    for (let i = 0; i < ColumnNum; i++) {
+      save_geo_means.push(divMatrix.querySelector(`#gm${i}`).value);
+    }
+    let CSVArray = matrixArray;
+    let header = alphabet.slice(0, ColumnNum);
+    header.push("Geometric Mean");
+    header.push("Normalized Geometric Mean");
+    header.unshift(" ");
+    CSVArray.unshift(header);
+    for (let i = 1; i < CSVArray.length; i++) {
+      CSVArray[i].unshift(`${header[i]}`);
+      CSVArray[i].push(save_geo_means[i - 1]);
+      CSVArray[i].push(save_nor_geo_means[i - 1]);
+    }
+    CSVArray.push([" "]);
+    CSVArray.push([]);
+    CSVArray[CSVArray.length - 1].push(resultShow.innerHTML);
+    saveCSV.addEventListener("click", () => {
+      var blob = new Blob([CSV.serialize(CSVArray)], { type: "text/csv" });
+      var url = window.URL.createObjectURL(blob);
+      var anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "PC_Calc_Result.csv";
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+      anchor.remove();
+    });
     // if (finditem.value > 0.33) {
     //   let x = matrixArray[indexes[0]][indexes[1]];
     //   let y = matrixArray[indexes[1]][indexes[2]];

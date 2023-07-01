@@ -395,9 +395,10 @@ const CreateMat = (RowNum, ColumnNum) => {
   <!-- <button class="btn btn-default Kii-process" style="margin-top: 10px;">(Re)Evaluate Kii</button> <strong><span class="Kii_result"></span></strong> -->
   <button class="btn btn-default Kii-process" style="margin-top: 10px;"><abbr title="Iteratively compute inconsistency (Kii)">Compute Kii</abbr></button> <strong><span class="Kii_result"></span></strong>
   <div>
-  <span id="save-csv-div"></span>
   <span id="next-Kii-div"></span>
   <span id="dis-based-reduce"></span>
+  <span id="save-csv-div"></span>
+  <span id="save-screenshot-div"></span>
   </div>
   </div>
   <div class="col-xs-1 text-center" id="geometric"></div>
@@ -649,12 +650,14 @@ const CreateMat = (RowNum, ColumnNum) => {
     let allTxt = divMatrix.querySelector(`#mt01`);
     let resultShow = divMatrix.querySelector(".Kii_result");
     let saveCSVButton = divMatrix.querySelector("#save-csv-div");
+    let saveScreenshotButton = divMatrix.querySelector("#save-screenshot-div");
     let nextKiiButton = divMatrix.querySelector("#next-Kii-div");
     let disBasedReduceButton = divMatrix.querySelector("#dis-based-reduce");
     resultShow.innerHTML = `Maximum of ${finditem.value.toFixed(2)} where ${
       Number(indexes[0]) + 1
     }, ${Number(indexes[1]) + 1}, ${Number(indexes[2]) + 1} is a triad.`;
     saveCSVButton.innerHTML = `<button id="save-csv" class="btn btn-default" style="margin-top: 10px;">Save to CSV File</button>`;
+    saveScreenshotButton.innerHTML = `<button id="save-screenshot" class="btn btn-default" style="margin-top: 10px;">Print</button>`;
     nextKiiButton.innerHTML = `<button id="next-Kii" class="btn btn-default" style="margin-top: 10px;">Next Most Inconsistent Triad</button>`;
     disBasedReduceButton.innerHTML = `<button id="disBasedReduceButton" class="btn btn-default" style="margin-top: 10px;"><abbr title="Distance Based Inconsistency Reduction">DBIR</button>`;
     //allTxt.style.backgroundColor = "#ffff00";
@@ -675,6 +678,7 @@ const CreateMat = (RowNum, ColumnNum) => {
     }
     let nextKii = divMatrix.querySelector("#next-Kii");
     let saveCSV = divMatrix.querySelector("#save-csv");
+    let saveScreenShot = divMatrix.querySelector("#save-screenshot");
     if (nextKiiCounter >= Object.keys(dict).length) {
       // console.log("hello");
       document.getElementById("next-Kii").disabled = true;
@@ -793,6 +797,17 @@ const CreateMat = (RowNum, ColumnNum) => {
       anchor.click();
       window.URL.revokeObjectURL(url);
       anchor.remove();
+    });
+
+    saveScreenShot.addEventListener("click", () => {
+      html2canvas(document.body).then((canvas) => {
+        let a = document.createElement("a");
+        a.download = "PCM.png";
+        a.href = canvas.toDataURL("image/png");
+        let link = canvas.toDataURL("image/png");
+        // a.click(); // MAY NOT ALWAYS WORK!
+        printJS(link, "image");
+      });
     });
     // if (finditem.value > 0.33) {
     //   let x = matrixArray[indexes[0]][indexes[1]];

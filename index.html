@@ -15,6 +15,9 @@
       crossorigin="anonymous"
     />
     <style>
+      body {
+        zoom: 100%;
+      }
       .Mat {
         width: 70px;
         margin: 7px;
@@ -22,10 +25,11 @@
     </style>
     <script type="module" src="script.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
-    <script src="http://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
   </head>
 
-  <body>
+  <body id="main-page">
     <div class="text-center">
       <h3>Online PC (Pairwise Comparisons) Matrix Calculator</h3>
       <br /><br />

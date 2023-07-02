@@ -787,6 +787,7 @@ const CreateMat = (RowNum, ColumnNum) => {
       onActivityChange();
       console.log(triadReduced);
     });
+
     let matrixArray = [];
     for (let i = 0; i < ColumnNum; i++) {
       let matrixRow = [];
@@ -801,7 +802,7 @@ const CreateMat = (RowNum, ColumnNum) => {
     for (let i = 0; i < ColumnNum; i++) {
       save_geo_means.push(divMatrix.querySelector(`#gm${i}`).value);
     }
-    let CSVArray = matrixArray;
+    let CSVArray = [...matrixArray];
     let header = alphabet.slice(0, ColumnNum);
     header.push("Geometric Mean");
     header.push("Normalized Geometric Mean");

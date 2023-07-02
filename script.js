@@ -309,6 +309,7 @@ const PCCalculator = () => {
 
   // handle "create matrix" button
   button.addEventListener("click", () => {
+    document.getElementById("scale-img").setAttribute("hidden", "true");
     MatrixDiv.innerHTML = "";
     // add data validation:
     if (

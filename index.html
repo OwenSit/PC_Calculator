@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png"/>
     <title>PC Calculator</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Work+Sans:wght@100..900&display=swap"
@@ -17,6 +19,14 @@
     <style>
       body {
         zoom: 100%;
+      }
+      img {
+        position: absolute;
+        left: 10;
+        bottom: 0;
+        height: 90%;
+        width: 90%;
+        margin-left: 20%;
       }
       .Mat {
         width: 70px;
@@ -37,7 +47,7 @@
       <a type="button" id="zoomIn">Zoom +</a>
       <br>
       <a type="button" id="zoomOut">Zoom -</a>
-
+      <img id="scale-img" src="./balance-154516.svg" alt="scale"/>
     </div>
     
 

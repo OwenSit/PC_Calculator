@@ -1,3 +1,18 @@
+var currentZoom = 1;
+
+function zoomIn() {
+  currentZoom += 0.05;
+  document.firstElementChild.style.zoom = currentZoom;
+}
+
+function zoomOut() {
+  currentZoom -= 0.05;
+  document.firstElementChild.style.zoom = currentZoom;
+}
+
+document.getElementById("zoomIn").addEventListener("click", () => zoomIn());
+document.getElementById("zoomOut").addEventListener("click", () => zoomOut());
+document.firstElementChild.style.zoom = 1;
 var CSV = {};
 !(function (p) {
   "use strict";

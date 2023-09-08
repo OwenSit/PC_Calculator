@@ -1,0 +1,93 @@
+#scale-img {
+    position: absolute;
+    left: 10;
+    bottom: 0;
+    height: 90%;
+    width: 90%;
+    margin-left: 20%;
+  }
+
+/*  
+This will change the scale image to the body background and make it translucent
+body {
+    height: 100vh;
+    --bg-img: url("balance-154516.svg");
+    --bg-img-opacity: .25;
+    
+    
+
+    
+}
+body::after {
+    content:'';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    opacity: var(--bg-img-opacity);
+    background-image: var(--bg-img);
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 5em;
+    height: 100vh;
+    
+}
+*/
+  .Mat {
+    width: 70px;
+    margin: 7px;
+  }
+  /* Container styles */
+  .container.maincontent {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 90%;
+    width: 100%;
+    margin-left: 20%;
+  }
+  
+ #treemap {
+    position: absolute;
+    left: 0;
+    padding-top: 0;
+    bottom: 0;
+    height: 50%;
+    width: 50%;
+    margin-left: 25%;
+  }
+  
+  .container-fluid.text-center{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 20px;
+    width: 100%;
+    /* overflow: hidden; */
+  }
+
+  /* Button styles */
+.help {
+    position:fixed;
+   
+    top: 5em;
+}
+
+a[type="button"] {
+    
+    display: inline-block;
+    padding: 10px 20px; 
+    background-color: #007bff;
+    color: #fff; 
+    text-decoration: none;
+    border-radius: 5px;
+    margin: .5em; 
+    cursor: pointer;
+    width: 6.5em;
+    text-align: center;
+
+  }
+  
+  a[type="button"]:hover {
+    background-color: #0056b3; 
+  }
+  

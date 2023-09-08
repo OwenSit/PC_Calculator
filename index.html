@@ -16,72 +16,36 @@
       integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
       crossorigin="anonymous"
     />
-    <style>
-      #scale-img {
-        position: absolute;
-        left: 10;
-        bottom: 0;
-        height: 90%;
-        width: 90%;
-        margin-left: 20%;
-      }
-      .Mat {
-        width: 70px;
-        margin: 7px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+
     <script type="module" src="script.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+    <!--Plotly box colour may be less accessible to those with RG colorblindness-->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
   </head>
 
   <body id="main-page">
-    <div class="help">
-      <h3 class="text-center">Online PC (Pairwise Comparisons) Matrix Calculator</h3>
-      <a href="./User_Manual.pdf">Help</a>
+    <div id="bg"></div>
+    <div id="main-page-title">
+   <h3 class="text-center">Online PC (Pairwise Comparisons) Matrix Calculator</h3>
+   <img id="scale-img" src="./balance-154516.svg" alt="scale"/>
+    </div><div class="help">
+      
+      <a href="./User_Manual.pdf" type="button">Help</a>
       <br>
       <a type="button" id="zoomIn">Zoom +</a>
       <br>
       <a type="button" id="zoomOut">Zoom -</a>
-      <img id="scale-img" src="./balance-154516.svg" alt="scale"/>
+      
+      
     </div>
+
     
 
-    <div
-      class="container maincontent"
-      style="
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 90%;
-        width: 100%;
-        margin-left: 20%;
-      "
-    ></div>
-    <div
-      id="treemap"
-      style="
-        position: absolute;
-        left: 0;
-        padding-top: 0;
-        bottom: 0;
-        height: 50%;
-        width: 50%;
-        margin-left: 25%;
-      "
-    ></div>
-    <div
-      class="container-fluid text-center"
-      style="
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 20px;
-        width: 100%;
-        /* overflow: hidden; */
-      "
-    >
+    <div class="container maincontent"></div>
+    <div id="treemap"></div>
+    <div class="container-fluid text-center">
     <p id="website-counter"></p>
       <p>
         Designer: Waldemar W. Koczkodaj, PhD,
@@ -90,7 +54,9 @@
         <br />
         Skeleton PC matrix template developer: Majid Piramoon,
         <br />
-        Treemap idea suggester: Darshan Vaishya
+        Treemap idea suggester: Darshan Vaishya,
+        <br />
+        Visual update and CSS refactoring: Devin Dellazizzo Toth
       </p>
     </div>
   </body>

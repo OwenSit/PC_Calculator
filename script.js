@@ -287,7 +287,7 @@ let DisBasedReduct = (x, y, z) => {
 const PCCalculator = () => {
   let PCCalculatorContent = document.createElement("PCCalculator");
   PCCalculatorContent.classList.add("Calculator");
-
+  
   PCCalculatorContent.innerHTML = `
 
   <div class="row">
@@ -396,9 +396,9 @@ const CreateMat = (RowNum, ColumnNum) => {
   //   size = 6;
   // }
   let MatContent = `
-  <div class="row">
+  <div class="row" >
   `;
-  MatContent += `<div class="col-xs-${size} text-center">`;
+  MatContent += `<div class="col-xs-${size} text-center" >`;
   MatContent += `<p style="margin-bottom:0;">PC (pairwise comparisons) Matrix</p> `;
   for (let i = 0; i < ColumnNum; i++) {
     MatContent += `<div class="col-xs-12">`;
@@ -857,3 +857,34 @@ const CreateMat = (RowNum, ColumnNum) => {
 const main = document.querySelector(".maincontent");
 main.innerHTML = "";
 main.append(PCCalculator());
+
+
+const style = document.createElement('style');
+style.textContent = `
+
+  /* Style for buttons */
+  .row {
+    background-color: rgba(255, 255, 255, 0.8);
+
+  }
+  .btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+   
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+   
+    z-index: 10;
+  }
+
+  .btn:hover {
+    background-color: #0056b3;
+    color: #fff;
+  }
+
+
+`;
+
+document.head.appendChild(style);
